@@ -2,11 +2,12 @@ package state;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
+import gfx.Camera;
 import main.Game;
 import main.Level;
-import objects.Moveable;
 import objects.Object;
 import objects.ObjectHandler;
 import objects.Player;
@@ -17,6 +18,7 @@ public class GameState extends State
 	private Player player;
 	
 	private Level level1;
+	private Camera camera;
 	
 	public GameState(Game game)
 	{
@@ -28,6 +30,7 @@ public class GameState extends State
 		objectHandler = new ObjectHandler();
 		player = new Player((Game.WIDTH / 2) - (Object.OBJECT_SIZE / 2), (Game.HEIGHT / 2) - (Object.OBJECT_SIZE / 2));
 		level1 = new Level(objectHandler, player);
+		camera = new Camera();
 		
 		objectHandler.addObject(player);
 		level1.loadLevel("Level1.txt");
@@ -39,6 +42,7 @@ public class GameState extends State
 	{
 		objectHandler.tick();
 		level1.collision();
+		camera.moveCam(player.getX() + (player.getWidth() / 2) - (Game.WIDTH / 2), 0);
 	}
 	
 	public void render(Graphics g)
@@ -46,7 +50,12 @@ public class GameState extends State
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 		
+		Graphics2D g2d = (Graphics2D)g;
+		
+		g2d.translate(-camera.getX(), -camera.getY());
 		objectHandler.render(g);
+		g2d.translate(camera.getX(), camera.getY());
+		
 	}
 	
 	public void keyPressed(KeyEvent e)

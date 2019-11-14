@@ -12,6 +12,7 @@ public abstract class Object
 	protected float x, y;
 	protected int width, height;
 	protected BufferedImage texture;
+	protected boolean onScreen = true;
 	
 	protected Object(float x, float y, int width, int height)
 	{
@@ -38,10 +39,12 @@ public abstract class Object
 	public int getWidth() { return width; }
 	public int getHeight() { return height; }
 	public BufferedImage getTexture() { return texture; }
+	public boolean isOnScreen() { return onScreen; }
 	
 	public void setX(float x) { this.x = x; }
 	public void setY(float y) { this.y = y; }
 	public void setWidth(int width) { this.width = width; }
 	public void setHeight(int height) { this.height = height; }
 	public void setTexture(BufferedImage texture) { this.texture = texture; }
+	public void setOnScreen(boolean onScreen) { this.onScreen = onScreen; }
 }

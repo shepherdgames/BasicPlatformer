@@ -14,6 +14,8 @@ import objects.Tile.Type;
 
 public class Level
 {
+	public static final int CUTOFF_AREA = Object.OBJECT_SIZE * 2;
+	
 	private ArrayList<Tile> tiles;
 	private ArrayList<Moveable> moveables;
 	private ObjectHandler objectHandler;
@@ -115,6 +117,22 @@ public class Level
 			}
 			
 			if(!colliding) m.setFalling(true);
+		}
+	}
+
+	public void checkOnScreen()
+	{
+		float leftBound = player.getX() + (player.getWidth() / 2) - (Game.WIDTH / 2) - CUTOFF_AREA;
+		float rightBound = player.getX() + (player.getWidth() / 2) + (Game.WIDTH / 2) + CUTOFF_AREA;
+		
+		for(Tile t: tiles)
+		{
+			if(t.getX() < leftBound || t.getX() > rightBound) t.setOnScreen(false);
+		}
+		
+		for(Moveable m: moveables)
+		{
+			if(m.getX() < leftBound || m.getX() > rightBound) m.setOnScreen(false);
 		}
 	}
 }
