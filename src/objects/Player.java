@@ -9,7 +9,7 @@ public class Player extends Moveable
 	
 	public Player(float x, float y)
 	{
-		super(x, y, Object.OBJECT_SIZE, Object.OBJECT_SIZE);
+		super(x, y, Object.OBJECT_SIZE, Object.OBJECT_SIZE * 2);
 	}
 	
 	public void init()
@@ -21,6 +21,7 @@ public class Player extends Moveable
 	{
 		x += velX;
 		y += velY;
+		this.handleVerticalMovement();
 	}
 	
 	public void render(Graphics g)

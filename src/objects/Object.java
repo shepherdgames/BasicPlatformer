@@ -27,9 +27,10 @@ public abstract class Object
 	public abstract void render(Graphics g);
 	
 	public Rectangle getBounds() { return new Rectangle((int)x, (int)y, width, height); }
-	public Rectangle getLeft() { return new Rectangle((int)x, (int)y, BOUND_SIZE, height); }
+	public Rectangle getExtendedBounds() { return new Rectangle((int)x, (int)y, width, height + BOUND_SIZE); }
+	public Rectangle getLeft() { return new Rectangle((int)x, (int)y+BOUND_SIZE, BOUND_SIZE, height-(BOUND_SIZE * 2)); }
 	public Rectangle getTop() { return new Rectangle((int)x, (int)y, width, BOUND_SIZE); }
-	public Rectangle getRight()  { return new Rectangle((int)x+width-BOUND_SIZE, (int)y, BOUND_SIZE, height); }
+	public Rectangle getRight()  { return new Rectangle((int)x+width-BOUND_SIZE, (int)y+BOUND_SIZE, BOUND_SIZE, height-(BOUND_SIZE*2)); }
 	public Rectangle getBottom() { return new Rectangle((int)x, (int)y+height-BOUND_SIZE, width, BOUND_SIZE); }
 	
 	public float getX() { return x; }

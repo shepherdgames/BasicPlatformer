@@ -15,7 +15,7 @@ public class Game extends Canvas implements Runnable
 	private static final long serialVersionUID = 1L;
 	
 	public static final int WIDTH = 800;
-	public static final int HEIGHT = 600;
+	public static final int HEIGHT = 608;
 	public static final String TITLE = "BasicPlatformer";
 	
 	private Thread thread;
