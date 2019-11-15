@@ -1,5 +1,8 @@
 package main;
 
+import java.awt.Color;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -20,19 +23,38 @@ public class Level
 	private ArrayList<Moveable> moveables;
 	private ObjectHandler objectHandler;
 	private Player player;
+	private String levelName;
+	private int levelNumber;
+	private boolean displayingLevelName = true;
+	private int displayCounter = 0;
 	
 	private int levelWidth, levelHeight;
 	
-	public Level(ObjectHandler objectHandler, Player player)
+	public Level(ObjectHandler objectHandler, Player player, int levelNumber)
 	{
 		this.objectHandler = objectHandler;
 		this.player = player;
+		this.levelNumber = levelNumber;
 		
 		tiles = new ArrayList<Tile>();
 		moveables = new ArrayList<Moveable>();
 		levelWidth = levelHeight = 0;
+		loadLevelName();
 		
 		moveables.add(this.player);
+	}
+	
+	private void loadLevelName()
+	{
+		levelName = "Level " + levelNumber + ": ";
+		switch(levelNumber)
+		{
+		case 1:
+			levelName += "Getting down to Basics";
+			break;
+		default:
+			levelName += "Placeholder Level Name";
+		}
 	}
 	
 	public void loadLevel(String fileName)
@@ -80,6 +102,35 @@ public class Level
 		for(Tile t: tiles)
 		{
 			objectHandler.addObject(t);
+		}
+	}
+	
+	public void tick()
+	{
+		if(displayingLevelName)
+		{
+			displayCounter++;
+			if(displayCounter >= 60 * 3)
+			{
+				displayCounter = 0;
+				displayingLevelName = false;
+			}
+		}else
+		{
+			collision();
+		}
+	}
+	
+	public void render(Graphics g)
+	{
+		if(this.displayingLevelName)
+		{
+			FontMetrics metrics = g.getFontMetrics(g.getFont());
+			int centreX = (Game.WIDTH - metrics.stringWidth(levelName)) / 2;
+			int centreY = ((Game.HEIGHT - metrics.stringWidth(levelName)) / 2) + metrics.getAscent();
+			
+			g.setColor(new Color(0, 0, 128));
+			g.drawString(levelName, centreX, centreY);
 		}
 	}
 
@@ -135,4 +186,8 @@ public class Level
 			if(m.getX() < leftBound || m.getX() > rightBound) m.setOnScreen(false);
 		}
 	}
+	
+	public boolean isDisplayingLevelName() { return displayingLevelName; }
+	
+	public void setDisplayingLevelName(boolean displayingLevelName) { this.displayingLevelName = displayingLevelName; }
 }

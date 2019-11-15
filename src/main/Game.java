@@ -2,12 +2,17 @@ package main;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferStrategy;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 
-import state.GameState;
+import state.MenuState;
 import state.State;
 
 public class Game extends Canvas implements Runnable
@@ -22,6 +27,7 @@ public class Game extends Canvas implements Runnable
 	private boolean running = false;
 	
 	private State startState;
+	private Font font;
 	
 	public Game()
 	{
@@ -33,8 +39,22 @@ public class Game extends Canvas implements Runnable
 	
 	public void init()
 	{	
-		startState = new GameState(this);
+		startState = new MenuState(this);
 		State.changeState(startState);
+		
+		try
+		{
+			font = Font.createFont(Font.TRUETYPE_FONT, new File("res/GameFont.otf"));
+			font = font.deriveFont(32.0f);
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			ge.registerFont(font);
+		} catch (FontFormatException | IOException e)
+		{
+			System.err.println("Could not load custom font file");
+			e.printStackTrace();
+			System.exit(-1);
+		}
+
 	}
 	
 	public void tick()
@@ -52,6 +72,7 @@ public class Game extends Canvas implements Runnable
 		}
 		
 		Graphics g = bs.getDrawGraphics();
+		g.setFont(font);
 		
 		State.currentState.render(g);
 		

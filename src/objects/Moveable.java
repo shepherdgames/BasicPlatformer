@@ -2,8 +2,8 @@ package objects;
 
 public abstract class Moveable extends Object
 {
-	public static float GRAV_INCREASE = 0.1f;
-	public static float MAX_GRAV = 4.0f;
+	public static float GRAV_INCREASE = 0.3f;
+	public static float MAX_GRAV = 7.0f;
 	
 	protected float velX, velY;
 	protected boolean falling = true;

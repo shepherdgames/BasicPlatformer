@@ -27,7 +27,7 @@ public class Tile extends Object
 	
 	public void render(Graphics g)
 	{
-		g.setColor(Color.BLUE);
+		g.setColor(Color.WHITE);
 		g.fillRect((int)x, (int)y, width, height);
 	}
 }

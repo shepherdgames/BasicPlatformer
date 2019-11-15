@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 public class Player extends Moveable
 {
-	public static final float PLAYER_SPEED = 3.0f;
+	public static final float PLAYER_SPEED = 5.0f;
 	
 	public Player(float x, float y)
 	{
