@@ -4,9 +4,10 @@ public class Camera
 {
 	private float x, y;
 
-	public Camera()
+	public Camera(float x, float y)
 	{
-		x = y = 0;
+		this.x = x;
+		this.y = y;
 	}
 	
 	public void moveCam(float x, float y)

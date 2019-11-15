@@ -18,12 +18,14 @@ import objects.Tile.Type;
 public class Level
 {
 	public static final int CUTOFF_AREA = Object.OBJECT_SIZE * 2;
+	public static final int START_LEVEL_TIME = 60 * 3;
 	
 	private ArrayList<Tile> tiles;
 	private ArrayList<Moveable> moveables;
 	private ObjectHandler objectHandler;
 	private Player player;
 	private String levelName;
+	private String startingString;
 	private int levelNumber;
 	private boolean displayingLevelName = true;
 	private int displayCounter = 0;
@@ -39,6 +41,8 @@ public class Level
 		tiles = new ArrayList<Tile>();
 		moveables = new ArrayList<Moveable>();
 		levelWidth = levelHeight = 0;
+		displayCounter = 0;
+		startingString = "Level starting in: " + (((START_LEVEL_TIME - displayCounter) / 60) + 1);
 		loadLevelName();
 		
 		moveables.add(this.player);
@@ -92,9 +96,16 @@ public class Level
 		{
 			for(int x = 0; x < levelWidth; x++)
 			{
-				if(tileTokens[y][x] == 1)
+				if(tileTokens[y][x] == -1)
+				{
+					player.setX(x * Object.OBJECT_SIZE);
+					player.setY(y * Object.OBJECT_SIZE);
+				}else if(tileTokens[y][x] == 1)
 				{
 					tiles.add(new Tile(x * Object.OBJECT_SIZE, y * Object.OBJECT_SIZE, Type.FLOOR));
+				}else if(tileTokens[y][x] == 2)
+				{
+					tiles.add(new Tile(x * Object.OBJECT_SIZE, y * Object.OBJECT_SIZE, Type.FALLABLE));
 				}
 			}
 		}
@@ -110,6 +121,7 @@ public class Level
 		if(displayingLevelName)
 		{
 			displayCounter++;
+			startingString = "Level starting in: " + (((START_LEVEL_TIME - displayCounter) / 60) + 1);
 			if(displayCounter >= 60 * 3)
 			{
 				displayCounter = 0;
@@ -126,16 +138,23 @@ public class Level
 		if(this.displayingLevelName)
 		{
 			FontMetrics metrics = g.getFontMetrics(g.getFont());
-			int centreX = (Game.WIDTH - metrics.stringWidth(levelName)) / 2;
-			int centreY = ((Game.HEIGHT - metrics.stringWidth(levelName)) / 2) + metrics.getAscent();
+			int nameCentreX = (Game.WIDTH - metrics.stringWidth(levelName)) / 2;
+			int nameCentreY = ((Game.HEIGHT - metrics.stringWidth(levelName)) / 2) + metrics.getAscent();
+			int startCentreX = ((Game.WIDTH - metrics.stringWidth(startingString)) / 2);
 			
 			g.setColor(new Color(0, 0, 128));
-			g.drawString(levelName, centreX, centreY);
+			g.drawString(levelName, nameCentreX, nameCentreY);
+			g.drawString(startingString, startCentreX, nameCentreY + 100);
 		}
 	}
 
 	public void collision()
 	{
+		for(Tile t: tiles)
+		{
+			t.setObjectTouching(false);
+		}
+		
 		for(Moveable m: moveables)
 		{
 			boolean colliding = false;
@@ -144,6 +163,7 @@ public class Level
 				if(m.getExtendedBounds().intersects(t.getBounds()))
 				{
 					colliding = true;
+					t.setObjectTouching(true);
 					if(m.getBounds().intersects(t.getBounds()))
 					{
 						if(m.getBottom().intersects(t.getTop()))

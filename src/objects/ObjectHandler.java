@@ -24,7 +24,10 @@ public class ObjectHandler
 	{
 		for(Object ob: objects)
 		{
-			ob.tick();
+			if(ob.isOnScreen())
+			{
+				ob.tick();
+			}
 		}
 	}
 	
@@ -32,7 +35,10 @@ public class ObjectHandler
 	{
 		for(Object ob: objects)
 		{
-			ob.render(g);
+			if(ob.isOnScreen())
+			{
+				ob.render(g);
+			}
 		}
 	}
 	

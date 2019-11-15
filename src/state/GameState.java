@@ -30,10 +30,10 @@ public class GameState extends State
 		objectHandler = new ObjectHandler();
 		player = new Player((Game.WIDTH / 2) - (Object.OBJECT_SIZE / 2), (Game.HEIGHT / 2) - (Object.OBJECT_SIZE / 2));
 		currentLevel = new Level(objectHandler, player, 1);
-		camera = new Camera();
 		
 		objectHandler.addObject(player);
 		currentLevel.loadLevel("Level1.txt");
+		camera = new Camera(player.getX() + (player.getWidth() / 2) - (Game.WIDTH / 2), 0);
 		
 		objectHandler.init();
 	}
@@ -57,8 +57,8 @@ public class GameState extends State
 		
 		g2d.translate(-camera.getX(), -camera.getY());
 		objectHandler.render(g);
-		currentLevel.render(g);
 		g2d.translate(camera.getX(), camera.getY());
+		currentLevel.render(g);
 		
 	}
 	
